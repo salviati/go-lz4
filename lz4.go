@@ -98,7 +98,7 @@ func CompressBound(isize int) int {
 Compresses 'isize' bytes from 'source' into 'dest'.
 Destination buffer must be already allocated,
 and must be sized to handle worst cases situations (input data not compressible)
-Worst case size evaluation is provided by macro LZ4_compressBound()
+Worst case size evaluation is provided by CompressBound()
 
 isize  : is the input size. Max supported value is ~1.9GB
 return : the number of bytes written in buffer dest
@@ -156,7 +156,7 @@ If the source stream is malformed, the function will stop decoding and return a 
 This function never writes beyond dest + maxOutputSize, and is therefore protected against malicious data packets
 
 note   : Destination buffer must be already allocated.
-This version is slightly slower than LZ4_uncompress()
+This version is slightly slower than Decompress()
 */
 func DecompressUnknownOutputSize(source, dest []byte, isize, maxOutputSize int) int {
 	return int( C.LZ4_uncompress_unknownOutputSize(cast(source), cast(dest), C.int(isize), C.int(maxOutputSize)) )
