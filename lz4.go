@@ -82,6 +82,14 @@ func cast(slice []byte) *C.char {
 	return (*C.char)(unsafe.Pointer(&slice[0]))
 }
 
+/*
+Provides the maximum size that LZ4 may output in a "worst case" scenario (input data not compressible)
+primarily useful for memory allocation of output buffer.
+
+isize  : is the input size. Max supported value is ~1.9GB
+return : maximum output size in a "worst case" scenario
+note : this function is limited by "int" range (2^31-1)
+*/
 func CompressBound(isize int) int {
 	return int(C._LZ4_compressBound(C.int(isize)))
 }
@@ -104,7 +112,7 @@ return : the number of bytes in compressed buffer dest
 note : destination buffer must be already allocated. 
 
 To avoid any problem, size it to handle worst cases situations (input data not compressible)
-Worst case size evaluation is provided by function LZ4_compressBound() (see "lz4.h")
+Worst case size evaluation is provided by function CompressBound()
 */
 func CompressHighCompression(source, dest []byte, isize int) int {
 	return int( C.LZ4_compressHC(cast(source), cast(dest), C.int(isize)) )
